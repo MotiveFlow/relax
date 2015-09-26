@@ -7,11 +7,11 @@ describe Relax::Client do
 
   context '#config' do
     it 'returns an instance of Relax::Config' do
-      subject.config.should be_a(Relax::Config)
+      expect(subject.config).to be_a(Relax::Config)
     end
 
     it 'memoizes the configuration' do
-      subject.config.should == subject.config
+      expect(subject.config).to eq subject.config
     end
   end
 
@@ -25,7 +25,7 @@ describe Relax::Client do
     end
 
     it 'returns self' do
-      subject.configure { }.should == client
+      expect(subject.configure { }).to eq client
     end
   end
 end

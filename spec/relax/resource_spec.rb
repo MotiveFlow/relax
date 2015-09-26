@@ -25,38 +25,38 @@ describe Relax::Resource do
     let(:connection) { subject.send(:connection) }
 
     it 'returns an instance of Faraday::Connection' do
-      connection.should be_a(Faraday::Connection)
+      expect(connection).to be_a(Faraday::Connection)
     end
 
     it 'uses the configured base URI as the URL' do
-      connection.url_prefix.should == URI.parse(client.config.base_uri)
+      expect(connection.url_prefix).to eq URI.parse(client.config.base_uri)
     end
 
     it 'uses the configured timeout' do
-      connection.options[:timeout].should == client.config.timeout
+      expect(connection.options[:timeout]).to eq client.config.timeout
     end
 
     it 'accepts an options hash to be passed to Faraday::Connection' do
       headers = { user_agent: "#{described_class} Test" }
       connection = subject.send(:connection, headers: headers)
-      connection.headers['User-Agent'].should == headers[:user_agent]
+      expect(connection.headers['User-Agent']).to eq headers[:user_agent]
     end
 
     it 'yields a builder to allow the middleware to be customized' do
-      subject.send(:connection) do |builder|
+      expect(subject.send(:connection) do |builder|
         builder.use(Faraday::Response::Logger)
-      end.builder.handlers.should include(Faraday::Response::Logger)
+      end.builder.handlers).to include(Faraday::Response::Logger)
     end
   end
 
   context 'connection delegation' do
-    let(:connection) { stub(:connection) }
+    let(:connection) { double(:connection) }
 
-    before { subject.stub(:connection).and_return(connection) }
+    before { allow(subject).to receive(:connection).and_return(connection) }
 
     Faraday::Connection::METHODS.each do |method|
       it "delegates ##{method} to #connection" do
-        connection.should_receive(method)
+        expect(connection).to receive(method)
         subject.send(method)
       end
     end

@@ -17,14 +17,14 @@ describe Relax::Delegator do
 
   context '.[]' do
     it 'accepts a client method name and returns a module' do
-      described_class[:client].should be_a(Module)
+      expect(described_class[:client]).to be_a(Module)
     end
   end
 
   context 'delegation' do
     Relax::Client.instance_methods.each do |method|
       it "delegates .#{method} to the client" do
-        subject.client.should_receive(method)
+        expect(subject.client).to receive(method)
         subject.send(method)
       end
     end
